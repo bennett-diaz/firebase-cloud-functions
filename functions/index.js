@@ -13,14 +13,12 @@ const axios = require("axios");
 
 const sumModel = "Salesforce/blip-image-captioning-base";
 // const testUrl = "https://backend-instacap.onrender.com/api/test";
-const awakenUrl = "https://backend-instacap.onrender.com/api/awaken";
 const awakenUrl = "https://backend-instacap.onrender.com/api/image/awaken";
 
 
 exports.helloWorld = onRequest((request, response) => {
-  logger.info("Hello world suceeded", { structuredData: true });
+  logger.info("Hello world suceeded", {structuredData: true});
   response.send("Hello world!");
-  response.send(`Hello ${process.env.PLANET} and ${process.env.AUDIENCE}`);
 });
 
 
