@@ -12,7 +12,6 @@ const logger = require("firebase-functions/logger");
 const axios = require("axios");
 
 const sumModel = "Salesforce/blip-image-captioning-base";
-// const testUrl = "https://backend-instacap.onrender.com/api/test";
 const awakenUrl = "https://backend-instacap.onrender.com/api/warm/wakeBoth";
 
 
@@ -26,7 +25,8 @@ exports.triggerHF = onRequest(async (request, response) => {
   try {
     const res = await axios.post(awakenUrl, {sumModelId: sumModel});
     const hfStatus = res.data.HF_model_status;
-    logger.log(`HF on-demand req success; model status: ${hfStatus}`, res.data);
+    const sum = res.data.message.split("Generated text: ")[1];
+    logger.log(`Wake req success: ${sumModel}| model=${hfStatus} | ${sum}`);
     response.send({message: "HF on-demand req successful", data: res.data});
   } catch (error) {
     logger.error("Error pinging /awaken endpoint:", error);
@@ -39,7 +39,8 @@ exports.keepHfWarm = onSchedule("every 14 minutes", async (data) => {
   try {
     const res = await axios.post(awakenUrl, {sumModelId: sumModel});
     const hfStatus = res.data.HF_model_status;
-    logger.log(`HF wake req success; model status: ${hfStatus}`, res.data);
+    const sum = res.data.message.split("Generated text: ")[1];
+    logger.log(`Wake req success: ${sumModel}| model=${hfStatus} | ${sum}`);
   } catch (error) {
     logger.error("Error with HF wake cron job:", error);
   }
